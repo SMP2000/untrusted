@@ -1,0 +1,90 @@
+/****************
+ * drones101.js *
+ ****************
+ * "Hello human, how nice of you to drop in." says a raspy voice, the speaker hidden in the darkness.
+ *  "Yessssssss, come clossssssser and ssssssssee my face." it says.
+ *  You approach the source of the voice and see a giant head with a single enourmous bloodshot eye in its center
+ *  and a face that only a mother could love, actually, no she couldnt
+ * "Sssssssssee my face and underssssssstand that beauty truly is in the eye of
+ * THE BEHOLDER!!!!!!!!"
+ */
+ 
+function startLevel(map) {
+    map.displayChapter('Chapter ? \ The Beholder');
+    
+    map.placePlayer(7, 5);
+    map.placeObject(map.getWidth(),25,'exit');
+    map.placeObject(map.getWidth()-5,25,'Gate');
+    map.placeObject(map.getWidth()-7,25,'Beholder');
+    map.placeObject(map.getWidth(),24,'block');
+    map.placeObject(map.getWidth(),26,'block');
+    map.placeObject(map.getWidth()-1,24,'block');
+    map.placeObject(map.getWidth()-1,26,'block');
+    map.placeObject(map.getWidth()-2,24,'block');
+    map.placeObject(map.getWidth()-2,26,'block');
+    map.placeObject(map.getWidth()-3,24,'block');
+    map.placeObject(map.getWidth()-3,26,'block');
+    map.placeObject(map.getWidth()-4,24,'block');
+    map.placeObject(map.getWidth()-4,26,'block');
+    map.placeObject(map.getWidth()-5,24,'block');
+    map.placeObject(map.getWidth()-5,26,'block');
+}
+ function moveToward(obj, type) {
+        var target = obj.findNearest(type);
+        var leftDist = obj.getX() - target.x;
+        var upDist = obj.getY() - target.y;
+
+        var direction;
+        if (upDist == 0 && leftDist == 0) {
+        	return;
+        } if (upDist > 0 && upDist >= leftDist) {
+            direction = 'up';
+        } else if (upDist < 0 && upDist < leftDist) {
+            direction = 'down';
+        } else if (leftDist > 0 && leftDist >= upDist) {
+            direction = 'left';
+        } else {
+            direction = 'right';
+        }
+        
+        
+        if (obj.canMove(direction)) {
+            obj.move(direction);
+        }
+    }
+
+    map.defineObject('Beholder', {
+        'type': 'dynamic',
+        'symbol': 'O',
+        'color': 'red',
+        'onCollision': function (player) {
+            player.killedBy('The Eye of the Beholder');
+        },
+        'behavior': function (me) {
+            moveToward(me, 'player');
+        }
+    });
+     map.defineObject('Gate', {
+        'type': 'trap',
+        'symbol': '<^>',
+        'color': 'red',
+        'onCollision': function (player) {
+            player.killedBy('A Mysterious Force');
+        }, 
+        #BEGIN_EDITABLE#
+        
+        
+        
+        
+        
+        #END_EDITABLE#
+        
+    });
+    
+function onExit(map) {
+        return true;
+}
+function validateLevel(map) {
+    map.validateExactlyXManyObjects(1, 'exit');
+    map.validateExactlyXManyObjects(12,'block');
+}
